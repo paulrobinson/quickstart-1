@@ -1,7 +1,7 @@
 package org.jboss.narayana.quickstarts.mongodb.performance;
 
-import org.jboss.narayana.compensations.cdi.api.Compensatable;
-import org.jboss.narayana.compensations.cdi.api.CompensationManager;
+import org.jboss.narayana.compensations.api.Compensatable;
+import org.jboss.narayana.compensations.api.CompensationManager;
 
 import javax.inject.Inject;
 import java.util.Random;

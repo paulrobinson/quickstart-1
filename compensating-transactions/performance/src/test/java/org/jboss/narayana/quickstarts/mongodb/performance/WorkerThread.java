@@ -1,7 +1,7 @@
 package org.jboss.narayana.quickstarts.mongodb.performance;
 
-import org.jboss.narayana.compensations.cdi.api.TransactionCompensatedException;
-import org.jboss.narayana.compensations.cdi.impl.BeanManagerUtil;
+import org.jboss.narayana.compensations.api.TransactionCompensatedException;
+import org.jboss.narayana.compensations.impl.BeanManagerUtil;
 
 import javax.enterprise.inject.spi.BeanManager;
 import java.util.Random;

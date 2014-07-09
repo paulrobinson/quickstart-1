@@ -4,9 +4,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import org.jboss.narayana.compensations.cdi.api.CompensationManager;
-import org.jboss.narayana.compensations.cdi.api.TxCompensate;
-import org.jboss.narayana.compensations.cdi.api.TxConfirm;
+import org.jboss.narayana.compensations.api.CompensationManager;
+import org.jboss.narayana.compensations.api.TxCompensate;
+import org.jboss.narayana.compensations.api.TxConfirm;
 
 import javax.inject.Inject;
 import java.net.UnknownHostException;

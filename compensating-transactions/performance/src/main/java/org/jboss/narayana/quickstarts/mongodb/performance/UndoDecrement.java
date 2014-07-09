@@ -4,7 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import org.jboss.narayana.compensations.cdi.api.CompensationHandler;
+import org.jboss.narayana.compensations.api.CompensationHandler;
 
 import javax.inject.Inject;
 

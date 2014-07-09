@@ -1,6 +1,6 @@
 package org.jboss.narayana.quickstarts.mongodb.performance;
 
-import org.jboss.narayana.compensations.cdi.api.CompensationScoped;
+import org.jboss.narayana.compensations.api.CompensationScoped;
 
 import java.io.Serializable;
 

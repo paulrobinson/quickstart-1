@@ -49,8 +49,8 @@ public class CounterServiceTest {
     private DBCollection counters;
 
     private static final int COUNTERS = 10;
-    private static final int THREADS = 50;
-    private static final int ITERATIONS = 20000;
+    private static final int THREADS = 1;
+    private static final int ITERATIONS = 1;
     private static final int COMPENSATE_PROB = 0;
 
     private List<Thread> threads = new LinkedList<Thread>();
@@ -73,7 +73,7 @@ public class CounterServiceTest {
         archive.delete(ArchivePaths.create("META-INF/MANIFEST.MF"));
 
         final String ManifestMF = "Manifest-Version: 1.0\n"
-                + "Dependencies: org.jboss.narayana.compensations\n";
+                + "Dependencies: org.jboss.narayana.txframework\n";
         archive.setManifest(new StringAsset(ManifestMF));
 
         return archive;
