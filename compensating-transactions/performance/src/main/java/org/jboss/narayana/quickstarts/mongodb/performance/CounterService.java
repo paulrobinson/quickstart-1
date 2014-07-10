@@ -1,7 +1,13 @@
 package org.jboss.narayana.quickstarts.mongodb.performance;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
 import org.jboss.narayana.compensations.api.Compensatable;
 import org.jboss.narayana.compensations.api.CompensationManager;
+import org.jboss.narayana.compensations.api.TxCompensate;
+import org.jboss.narayana.compensations.api.TxConfirm;
 
 import javax.inject.Inject;
 import java.util.Random;
