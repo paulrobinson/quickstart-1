@@ -4,6 +4,7 @@ import org.jboss.narayana.compensations.api.TransactionCompensatedException;
 import org.jboss.narayana.compensations.impl.BeanManagerUtil;
 
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,7 +33,8 @@ public class WorkerThread implements Runnable {
         this.counters = counters;
         this.compensateProbability = compensateProbability;
 
-        BeanManager beanManager = BeanManagerUtil.getBeanManager();
+        //BeanManager beanManager = BeanManagerUtil.getBeanManager();
+        BeanManager beanManager = CDI.current().getBeanManager();
         counterService = BeanManagerUtil.createBeanInstance(CounterService.class, beanManager);
     }
 
