@@ -51,8 +51,8 @@ public class CounterServiceTestSOAP {
     private DBCollection counters;
 
     private static final int COUNTERS = 5;
-    private static final int THREADS = 1;
-    private static final int ITERATIONS = 100;
+    private static final int THREADS = 10;
+    private static final int ITERATIONS = 5000;
     private static final int COMPENSATE_PROB = 0;
 
     private List<Thread> threads = new LinkedList<Thread>();
@@ -69,7 +69,6 @@ public class CounterServiceTestSOAP {
                 .addAsManifestResource("services/javax.enterprise.inject.spi.Extension")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsLibraries(lib);
-
 
 
         archive.delete(ArchivePaths.create("META-INF/MANIFEST.MF"));
@@ -89,13 +88,14 @@ public class CounterServiceTestSOAP {
      */
     @Before
     public void resetAccountData() throws Exception {
+
         MongoClient mongo = new MongoClient("localhost", 27017);
         DB database = mongo.getDB("test");
 
         database.getCollection("counters").drop();
         counters = database.getCollection("counters");
 
-        for (int i=1; i < COUNTERS+1; i++) {
+        for (int i = 1; i < COUNTERS + 1; i++) {
             counters.insert(new BasicDBObject("name", String.valueOf(i)).append("value", 0).append("tx", 0));
         }
     }
@@ -103,24 +103,55 @@ public class CounterServiceTestSOAP {
     @Test
     public void perf() throws Exception {
 
-        RunnerService runnerService = createWebServiceClient();
-        runnerService.run(ITERATIONS, COUNTERS, COMPENSATE_PROB);
+        double before = System.currentTimeMillis();
+
+        LinkedList<Thread> threads = new LinkedList<Thread>();
+        for (int i = 0; i < THREADS; i++) {
+            Thread clientThread = new Thread(new ClientThread());
+            threads.add(clientThread);
+            clientThread.start();
+        }
+        for (int i = 0; i < THREADS; i++) {
+            threads.get(i).join();
+        }
+
+        double after = System.currentTimeMillis();
+        double durationSecs = (after - before) / 1000;
+
+
+        double itersPerSec = ITERATIONS / durationSecs;
+        System.out.println("\n\n");
+        System.out.println("Duration: " + durationSecs);
+        System.out.println("Iterations: " + ITERATIONS);
+        System.out.println("THROUGHPUT: " + itersPerSec + "/sec");
+        System.out.println("\n\n");
 
     }
 
-    private RunnerService createWebServiceClient() {
+    private static class ClientThread implements Runnable {
 
-        try {
-            URL wsdlLocation = new URL("http://localhost:8080/test/HotelServiceService?wsdl");
-            QName serviceName = new QName("http://www.jboss.org/as/quickstarts/compensationsApi/travel/hotel",
-                    "HotelServiceService");
-            QName portName = new QName("http://www.jboss.org/as/quickstarts/compensationsApi/travel/hotel",
-                    "HotelService");
 
-            Service service = Service.create(wsdlLocation, serviceName);
-            return service.getPort(portName, RunnerService.class);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Error creating Web Service client", e);
+        @Override
+        public void run() {
+
+            RunnerService runnerService = createWebServiceClient();
+            runnerService.run(ITERATIONS, COUNTERS, COMPENSATE_PROB);
+        }
+
+        private RunnerService createWebServiceClient() {
+
+            try {
+                URL wsdlLocation = new URL("http://localhost:8080/test/HotelServiceService?wsdl");
+                QName serviceName = new QName("http://www.jboss.org/as/quickstarts/compensationsApi/travel/hotel",
+                        "HotelServiceService");
+                QName portName = new QName("http://www.jboss.org/as/quickstarts/compensationsApi/travel/hotel",
+                        "HotelService");
+
+                Service service = Service.create(wsdlLocation, serviceName);
+                return service.getPort(portName, RunnerService.class);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Error creating Web Service client", e);
+            }
         }
     }
 }
